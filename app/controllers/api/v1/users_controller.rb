@@ -1,8 +1,16 @@
 class Api::V1::UsersController < ApplicationController
+  before_action :authorize_request, except: :create
+  before_action :find_user, except: %i[create index]
+
   def index
     @users = User.all
-    if @users
-      render json: {ok: true, users: @users}, status: :ok
+    if @users.present?
+
+      users_to_show = @users.map do |user|
+        user.attributes.except('password', 'password_digest')
+      end
+
+      render json: {ok: true, users: users_to_show}, status: :ok
     else
       render json: { ok: false, message: 'No users found' }, status: :not_found
     end
@@ -20,6 +28,7 @@ class Api::V1::UsersController < ApplicationController
 
 
   private
+
   def user_params
     JSON.parse(request.body.read).symbolize_keys
   end
