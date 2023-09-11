@@ -11,7 +11,8 @@ class Api::V1::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      render json: { ok: true, user: @user }, status: :created
+
+      render json: { ok: true, user: @user.attributes.except('password', 'password_digest')}, status: :created
     else
       render json: { ok: false, message: @user.errors.full_messages }, status: :unprocessable_entity
     end
