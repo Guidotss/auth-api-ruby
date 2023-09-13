@@ -15,7 +15,7 @@ module AuthApi
       Dotenv.load
     end
 
-    config.autoload_paths << Rails.root.join('lib')
+    config.autoload_paths << Rails.root.join('/lib')
 
 
     # Configuration for the application, engines, and railties goes here.
